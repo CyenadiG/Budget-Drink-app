@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, jsonify
 from pymongo import MongoClient
 
 MONGODB_URI = "mongodb+srv://greeneca22_db_user:Yw583pcYSvaoYM6p@drink-db.rlgxqhl.mongodb.net/?appName=drink-db"
@@ -61,10 +61,10 @@ def welcome():
 def search_drink_items(budget):
     budget = float(budget)
     result = []
-    for drink in collection.find():
-        if drink['price']<= budget:
-            drink["_id"]=str(drink["_id"])
-            result.append(drink)
-    return result
+    for drink in collection.find({"price": {"$lte": budget}}):
+        drink["_id"] = str(drink["_id"])
+        result.append(drink)
+
+    return jsonify(result)
 
 app.run(host = "0.0.0.0", port = 5000)
