@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Drink on a Budget</title>
+    <style>
+         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Poppins:wght@300;400;500&display=swap');
+
+       body {
+        margin: 0;
+        padding: 0;
+        font-family: 'Poppins', sans-serif;
+        background-color: #f5efe6;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-height: 100vh;
+    }
+
+    /* Title */
+    h1 {
+        font-family: 'Playfair Display', serif;
+        color: #5c3a21;
+        font-size: 38px;
+        margin-top: 60px;
+        margin-bottom: 25px;
+        text-align: center;
+    }
+
+    /* Input */
+    #budget_input {
+        width: 320px;
+        max-width: 80%;
+        padding: 12px 15px;
+        border: 2px solid #8b5e3c;
+        border-radius: 12px;
+        background-color: #fffaf3;
+        font-size: 15px;
+        outline: none;
+        transition: 0.3s ease;
+        display: block;
+        margin: 0 auto;
+    }
+
+    #budget_input:focus {
+        border-color: #5c3a21;
+        box-shadow: 0 0 8px rgba(92, 58, 33, 0.2);
+    }
+
+    /* Button */
+    button {
+        display: block;
+        margin: 18px auto 0 auto;
+        padding: 10px 30px;
+        border: none;
+        border-radius: 25px;
+        background-color: #8b5e3c;
+        color: white;
+        font-size: 15px;
+        cursor: pointer;
+        transition: all 0.25s ease;
+    }
+
+    button:hover {
+        background-color: #5c3a21;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 15px rgba(92, 58, 33, 0.2);
+    }
+
+    /* 2-Column Grid */
+    #result_list {
+        list-style: none;
+        padding: 0;
+        margin-top: 40px;
+        width: 750px;
+        max-width: 92%;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 25px;
+    }
+
+    /* Card styling */
+    #result_list li {
+        display: flex;              /* FIX: align text + image */
+        justify-content: space-between;
+        align-items: center;
+        background-color: #fffaf3;
+        padding: 16px;
+        border-radius: 12px;
+        border-left: 6px solid #8b5e3c;
+        color: #4a2c1d;
+        font-size: 15px;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
+        transition: 0.2s ease;
+    }
+
+    #result_list li:hover {
+        transform: translateY(-4px);
+        background-color: #f3e7d9;
+    }
+
+    /* Image styling */
+    #result_list li img {
+        width: 64px;
+        height: 64px;
+        border-radius: 10px;
+        object-fit: cover;
+        margin-left: 15px;
+        background: #f3f4f6;
+        border: 1px solid rgba(0,0,0,0.08);
+    }
+
+    /* Mobile */
+    @media (max-width: 700px) {
+        #result_list {
+            grid-template-columns: 1fr;
+        }
+    }
+    </style>
+
+
+    <script src = "https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script>
+        //1. once click on the search button, grab the budget value
+        function search(){
+        console.log ("Button Clicked");
+        var budget = $("#budget_input").val();
+        console.log("Budget: " + budget);
+
+         //2. call the backend server URL/ search/<budget> to get the returned results
+         //ajax
+         $.ajax({
+            url: `/search/${encodeURIComponent(budget)}`,
+            method : "GET",
+            dataType: "JSON",
+            success: function (data) {
+                console.log("Success:", data);
+                //TODO: render results to page
+                //3. render the results under the list
+                $("#result_list").empty();
+                for (var i =0; i < data.length; i++){
+                console.log("test: " + data[i].name);
+                console.log("test: " + data[i].price);
+                $("#result_list").append(
+                    "<li> "
+                    + data[i].name + ": " + data[i].price
+                    + "<img src ='" + data[i].image_url + "'></img>"
+                    +  " </li>");
+                }
+            },
+            error: function(xhr, status,err){
+                    console.error("Error: ", status,err, xhr.responseText);
+            }
+         });
+        }
+
+    </script>
+</head>
+<body>
+    <h1><em>Welcome to Drink on a Budget</em></h1>
+    <input id ="budget_input" type = "text"></input>
+    <button onclick= "search()">Search</button>
+    <ul id = "result_list">
+
+    </ul>
+</body>
+</html>
