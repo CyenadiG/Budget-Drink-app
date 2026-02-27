@@ -2,11 +2,13 @@
 from flask import Flask, render_template
 from pymongo import MongoClient
 
-MONGODB_URI = "mongodb+srv://greeneca22_db_user:Yw583pcYSvaoYM6p@drink-db.rlgxqhl.mongodb.net/?appName=drink-db"
+MONGODB_URI = "mongodb+srv://greeneca22_db_user:Yw583pcYSvaoYM6p@budget-db.sp7fi8c.mongodb.net/?appName=budget-db"
+#MONGO_URI="mongodb+srv://greeneca22_db_user:Yw583pcYSvaoYM6p>@drink-db.rlgxqhl.mongodb.net/?appName=drink-db"
+#MONGODB_URI = "mongodb+srv://greeneca22_db_user:Yw583pcYSvaoYM6p@drink-db.rlgxqhl.mongodb.net/?appName=drink-db"
 client = MongoClient(MONGODB_URI)
 
-db = client['budget-drink']
-collection = db['drinks']
+db = client['budget-db']
+collection = db['drinks-db']
 
 app = Flask(__name__)
 
