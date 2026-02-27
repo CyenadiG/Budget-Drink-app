@@ -59,10 +59,19 @@ def welcome():
 
 @app.route("/search/<budget>") #mapping
 def search_drink_items(budget):
-    budget = float(budget)
+    try:
+        budget = float(budget)
+    except ValueError:
+        return jsonify({"error": "budget must be a number"}), 400
+
     result = []
     for drink in collection.find({"price": {"$lte": budget}}):
         drink["_id"] = str(drink["_id"])
+
+        # If Mongo stored price as Decimal128, convert it
+        if "price" in drink and hasattr(drink["price"], "to_decimal"):
+            drink["price"] = float(drink["price"].to_decimal())
+
         result.append(drink)
 
     return jsonify(result)
