@@ -132,7 +132,7 @@
          $.ajax({
             url: `/search/${encodeURIComponent(budget)}`,
             method : "GET",
-            dataType: "JSON",
+            dataType: "json",
             success: function (data) {
                 console.log("Success:", data);
                 //TODO: render results to page
@@ -149,11 +149,8 @@
                 }
             },
             error: function(xhr, status,err){
-                    console.error("AJAX failed");
-                    console.error("status:", status);
-                    console.error("err:", err);
-                    console.error("HTTP:", xhr.status, xhr.statusText);
-                    console.error("response:", xhr.responseText);
+                     console.error("Error:", status, err, xhr.responseText);
+                     }
          });
         }
 
